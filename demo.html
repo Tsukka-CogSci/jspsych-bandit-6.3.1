@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="jspsych.js"></script>
+        <script src="plugins/jspsych-preload.js"></script>
+        <script src="jspsych-bandit-6.3.1.js"></script>
+        <link rel="stylesheet" href="css/jspsych.css">
+
+    </head>
+    <body></body>
+    <script>
+        var images = [];
+
+        images.push('stimuli/circle.png');
+        images.push('stimuli/square.png');
+        images.push('stimuli/triangle.png');
+
+        const preload = {
+                type: 'preload',
+                images: images,
+            };
+        
+        var timeline = [];
+        timeline.push(preload);
+
+        function RandomInt(i) {
+            return Math.floor(Math.random() * i);
+        }
+
+        function shuffle(array) {
+            var tmp = [];
+            for (let i = array.length - 1; i >= 0; i--) {
+                var j = RandomInt(i+1);
+                tmp.push(array[j]);
+                array.splice(j, 1);
+            }
+            return tmp
+        }
+
+        var TL = [];
+        var trials = 7; 
+
+        for (let t = 0; t < trials; t++) {
+            var names = ["circle", "square", "triangle"];
+            var rwds = [0, 0, 1];
+            var shufflednames = shuffle(names);
+            var shuffledrwds = shuffle(rwds);
+            TL.push({img0: "stimuli/"+shufflednames[0]+".png", img1: "stimuli/"+shufflednames[1]+".png", img2: "stimuli/"+shufflednames[2]+".png", rwd0: shuffledrwds[0], rwd1: shuffledrwds[1], rwd2: shuffledrwds[2]});
+        }
+
+        var example_block = {
+                timeline: [{
+                        type: 'bandit',
+                        image1: jsPsych.timelineVariable('img0'),
+                        image2: jsPsych.timelineVariable('img1'),
+                        image3: jsPsych.timelineVariable('img2'),
+                        reward1: jsPsych.timelineVariable('rwd0'),
+                        reward2: jsPsych.timelineVariable('rwd1'),
+                        reward3: jsPsych.timelineVariable('rwd2'),
+                        trial_duration: 10000,
+                        reward_duration: 700,
+                        post_trial_gap: 300
+                    }
+                ],
+                timeline_variables: TL
+            };
+        timeline.push(example_block);
+
+        jsPsych.init({
+            timeline: timeline,
+            on_finish: function(){jsPsych.data.displayData();}
+        })
+    </script>
+</html>
