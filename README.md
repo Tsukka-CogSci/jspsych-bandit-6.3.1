@@ -17,6 +17,7 @@ Note that this plugin is still under construction.
 - trial_duration: the duration of the stimuli being displayed (ms)
 - reward_duration: the duration of the reward being displayed (ms)
 - timeout_message: the message displayed when it timed out
+- hidden_params: hidden parameters to be recorded for each trial
 
 ## About related works
 Dr. Stojic already made a related plugin:https://github.com/hstojic/jsPsych-bandit-example
